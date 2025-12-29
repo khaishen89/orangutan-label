@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LabelConfig } from '../types';
 import { ORANGUTAN_LOGO_SVG, TEXTURE_OVERLAY } from '../constants';
@@ -7,97 +6,127 @@ interface LabelDesignerProps {
   config: LabelConfig;
 }
 
+const CulturalMotif = () => (
+  <svg width="100" height="100" viewBox="0 0 100 100" className="absolute opacity-[0.04] pointer-events-none inset-0 w-full h-full">
+    <defs>
+      <pattern id="batik-grid" width="120" height="120" patternUnits="userSpaceOnUse">
+        <path d="M60 10 L70 40 L100 50 L70 60 L60 90 L50 60 L20 50 L50 40 Z" fill="currentColor" />
+        <circle cx="60" cy="50" r="5" fill="currentColor" />
+        <path d="M10 10 Q 30 10 30 30" fill="none" stroke="currentColor" strokeWidth="1" />
+        <path d="M110 10 Q 90 10 90 30" fill="none" stroke="currentColor" strokeWidth="1" />
+        <path d="M10 110 Q 30 110 30 90" fill="none" stroke="currentColor" strokeWidth="1" />
+        <path d="M110 110 Q 90 110 90 90" fill="none" stroke="currentColor" strokeWidth="1" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#batik-grid)" />
+  </svg>
+);
+
 const LabelDesigner: React.FC<LabelDesignerProps> = ({ config }) => {
-  // 180x60 aspect ratio (3:1)
   return (
     <div 
-      className="relative w-full aspect-[3/1] rounded-lg shadow-2xl overflow-hidden border border-stone-200"
+      className="relative w-full aspect-[3/1] rounded-sm shadow-2xl overflow-hidden border border-stone-300 transition-all duration-500"
       style={{ backgroundColor: config.themeColor }}
     >
+      {/* Background Texture & Patterns */}
+      <div className="absolute inset-0 text-stone-900">
+        <CulturalMotif />
+      </div>
       {TEXTURE_OVERLAY}
       
-      {/* Decorative Border */}
-      <div className="absolute inset-4 border border-stone-800/20 pointer-events-none"></div>
-      <div className="absolute inset-6 border-2 border-stone-800/10 pointer-events-none"></div>
+      {/* Structural Borders */}
+      <div className="absolute inset-6 border-[0.5px] border-stone-900/10 pointer-events-none"></div>
+      <div className="absolute inset-[26px] border-[0.5px] border-stone-900/5 pointer-events-none"></div>
 
-      <div className="relative h-full flex divide-x divide-stone-800/10">
+      <div className="relative h-full flex">
         
-        {/* LEFT SECTION - Usage & Ingredients */}
-        <div className="w-1/3 p-8 flex flex-col justify-center gap-4 text-xs">
-          <div>
-            <h4 className="font-bold uppercase tracking-widest mb-1 opacity-70">How to Ritual</h4>
-            <p className="text-stone-700 leading-relaxed">
-              Apply to damp skin. Massage gently to allow the rice bran oils to penetrate. Rinse with warm water to reveal soft, nourished skin.
+        {/* LEFT PANEL: Technical Details & Ritual */}
+        <div className="w-[30%] p-10 flex flex-col justify-center border-r border-stone-900/5 bg-white/5">
+          <div className="mb-8">
+            <h4 className="font-bold uppercase tracking-[0.2em] text-[9px] mb-3 text-stone-400">The Ritual</h4>
+            <p className="text-[11px] text-stone-700 leading-relaxed font-serif italic">
+              Experience the ancient wisdom of rice bran. Gently lather onto skin, allowing the natural antioxidants to nourish and protect. Rinse to reveal soft, balanced skin.
             </p>
           </div>
-          <div>
-            <h4 className="font-bold uppercase tracking-widest mb-1 opacity-70">Pure Ingredients</h4>
-            <div className="flex flex-wrap gap-x-2 gap-y-1 text-[10px] text-stone-600 italic">
+          
+          <div className="mb-8">
+            <h4 className="font-bold uppercase tracking-[0.2em] text-[9px] mb-3 text-stone-400">Composition</h4>
+            <div className="flex flex-wrap gap-x-2 gap-y-1 text-[9px] text-stone-500 font-serif">
               {config.ingredients.map((ing, i) => (
-                <span key={i}>{ing}{i < config.ingredients.length - 1 ? " • " : ""}</span>
+                <span key={i} className="whitespace-nowrap">{ing}{i < config.ingredients.length - 1 ? " • " : ""}</span>
               ))}
             </div>
           </div>
-          <div className="mt-2 pt-2 border-t border-stone-800/10">
-            <p className="text-[9px] opacity-60">
-              Made with passion. No synthetic surfactants. No parabens. Cruelty-free. 
-              Proudly crafted for the conscious skin.
-            </p>
+
+          <div className="mt-auto pt-6 border-t border-stone-900/5">
+            <div className="flex items-center gap-2 opacity-40 grayscale">
+               <div className="w-6 h-6 border border-current rounded-full flex items-center justify-center text-[8px] font-bold">100</div>
+               <span className="text-[8px] uppercase tracking-widest font-bold">Natural Origin</span>
+            </div>
           </div>
         </div>
 
-        {/* CENTER SECTION - Primary Branding */}
-        <div className="w-1/3 p-6 flex flex-col items-center justify-center text-center relative">
-          {/* Subtle cultural pattern background */}
-          <div className="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
-            <div className="w-48 h-48 border-[20px] border-stone-800 rounded-full"></div>
-          </div>
-
-          <div className="w-24 h-24 mb-4">
+        {/* CENTER PANEL: Brand Identity */}
+        <div className="w-[40%] px-8 py-12 flex flex-col items-center justify-center text-center relative">
+          {/* Subtle frame for the logo */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-stone-900/5 rounded-full pointer-events-none"></div>
+          
+          <div className="w-24 h-24 mb-6 drop-shadow-md transform transition-transform hover:scale-105 duration-700">
             {ORANGUTAN_LOGO_SVG(config.accentColor)}
           </div>
           
-          <h1 className="text-4xl font-display tracking-tight text-stone-900 mb-1" style={{ color: config.textColor }}>
-            OrangUtan
-          </h1>
-          <p className="text-[10px] uppercase tracking-[0.3em] font-medium mb-6 opacity-70">
-            Certified Original
-          </p>
+          <div className="space-y-1 mb-6">
+            <h1 className="text-6xl font-display tracking-tight leading-none" style={{ color: config.textColor }}>
+              OrangUtan
+            </h1>
+            <p className="text-[10px] uppercase tracking-[0.5em] font-semibold text-stone-400">
+              Artisanal Botanical Care
+            </p>
+          </div>
           
-          <div className="h-px w-20 bg-stone-800/20 mb-6"></div>
+          <div className="h-[1px] w-24 bg-stone-900/10 mb-6"></div>
           
-          <h2 className="text-xl font-serif italic mb-2 leading-tight">
-            {config.title}
-          </h2>
-          <p className="text-[11px] font-medium tracking-wide uppercase opacity-80 mb-4">
-            — {config.subtitle} —
-          </p>
+          <div className="max-w-[280px]">
+            <h2 className="text-2xl font-serif italic text-stone-800 leading-tight mb-2">
+              {config.title}
+            </h2>
+            <p className="text-[10px] font-bold tracking-[0.25em] uppercase text-stone-500">
+              {config.subtitle}
+            </p>
+          </div>
           
-          <div className="absolute bottom-6 text-[9px] tracking-widest font-bold opacity-40">
-            180 CM × 60 CM  |  PREMIUM SERIES
+          <div className="absolute bottom-10 flex flex-col items-center">
+            <span className="text-[8px] tracking-[0.4em] font-bold text-stone-300 uppercase">Premium Heritage Collection</span>
           </div>
         </div>
 
-        {/* RIGHT SECTION - Brand Story & Details */}
-        <div className="w-1/3 p-8 flex flex-col justify-center text-xs leading-relaxed text-stone-700">
-           <h4 className="font-bold uppercase tracking-widest mb-2 opacity-70">The Heritage</h4>
-           <p className="mb-4">
-            {config.description}
-           </p>
+        {/* RIGHT PANEL: Philosophy & Traceability */}
+        <div className="w-[30%] p-10 flex flex-col justify-center border-l border-stone-900/5">
+           <div className="mb-8">
+             <h4 className="font-bold uppercase tracking-[0.2em] text-[9px] mb-3 text-stone-400">Our Essence</h4>
+             <p className="text-[11px] text-stone-600 leading-relaxed font-serif italic line-clamp-6">
+              {config.description}
+             </p>
+           </div>
            
-           <div className="flex items-end justify-between mt-auto">
-             <div className="flex flex-col gap-1">
-               <div className="w-24 h-6 bg-stone-300/30 rounded flex items-center justify-center text-[8px] font-mono">
-                 BATCH: ORU-2024-001
-               </div>
-               <p className="text-[9px] italic opacity-50">Naturally crafted in small batches.</p>
+           <div className="mt-auto space-y-6">
+             <div className="flex justify-between items-end">
+                <div className="space-y-1">
+                  <p className="text-[8px] font-mono text-stone-400 uppercase tracking-tighter">Batch No: OR-2024-BR</p>
+                  <p className="text-[8px] font-serif italic text-stone-400">Crafted in the heart of the tropics.</p>
+                </div>
+                
+                {/* Minimal Barcode */}
+                <div className="flex items-end h-8 gap-[1.5px] opacity-20">
+                  {[2,1,3,1,2,4,1,2,3,1,2,1].map((w, i) => (
+                    <div key={i} className="bg-stone-900" style={{ width: `${w}px`, height: `${40 + Math.random() * 60}%` }}></div>
+                  ))}
+                </div>
              </div>
              
-             {/* Mock QR or Barcode */}
-             <div className="w-12 h-12 bg-stone-800/10 flex flex-col gap-[2px] p-1">
-               {Array.from({length: 8}).map((_, i) => (
-                 <div key={i} className="bg-stone-800 h-[2px]" style={{ width: `${Math.random() * 100}%` }}></div>
-               ))}
+             <div className="flex items-center justify-between pt-4 border-t border-stone-900/5">
+                <span className="text-[9px] font-bold text-stone-900/30">180CM × 60CM</span>
+                <span className="text-[9px] font-bold text-stone-900/30">L-2024-REF</span>
              </div>
            </div>
         </div>
